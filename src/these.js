@@ -4,6 +4,7 @@ var combinators = require('fantasy-combinators'),
     Option = require('fantasy-options'),
 
     compose = combinators.compose,
+    identity = combinators.identity,
 
     These = daggy.taggedSum({
         This: ['x'],
@@ -16,17 +17,7 @@ These.of = function(x) {
 };
 
 These.prototype.map = function(f) {
-    return this.cata({
-        This: function(x) {
-            return These.This(x);
-        },
-        That: function(x) {
-            return These.That(f(x));
-        },
-        Both: function(x, y) {
-            return These.Both(x, f(y));
-        }
-    });
+    return this.bimap(identity, f);
 };
 
 These.prototype.bimap = function(f, g) {
