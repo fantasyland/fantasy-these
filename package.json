@@ -1,0 +1,41 @@
+{
+  "name": "fantasy-these",
+  "description": "Data type isomorphic to α ∨ β ∨ (α ∧ β).",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fantasyland/fantasy-these.git"
+  },
+  "keywords": [
+    "fantasyland",
+    "these",
+    "functors"
+  ],
+  "author": "Simon Richardson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fantasyland/fantasy-these/issues"
+  },
+  "dependencies": {
+    "daggy": "^0.x.x",
+    "fantasy-options": "^0.x.x",
+    "fantasy-combinators": "^0.x.x"
+  },
+  "devDependencies": {
+    "grunt-cli": "0.1.9",
+    "grunt": "0.4.x",
+    "grunt-contrib-jshint": "0.6.x",
+    "grunt-contrib-nodeunit": "0.2.0",
+    "fantasy-check": "git+https://github.com/fantasyland/fantasy-check.git",
+    "fantasy-helpers": "^0.x.x",
+    "fantasy-identities": "git+https://github.com/fantasyland/fantasy-identities.git"
+  },
+  "scripts": {
+    "test": "$(npm bin)/nodeunit test.js"
+  },
+  "scripts": {
+      "test": "grunt"
+  },
+  "files": ["fantasy-these.js", "src/*.js"],
+  "main": "fantasy-these.js",
+  "version": "0.0.1"
+}
