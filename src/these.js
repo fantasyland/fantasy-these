@@ -1,20 +1,17 @@
-var combinators = require('fantasy-combinators'),
-    daggy = require('daggy'),
+'use strict';
 
-    Option = require('fantasy-options'),
+const daggy = require('daggy');
 
-    compose = combinators.compose,
-    identity = combinators.identity,
+const {compose, identity} = require('fantasy-combinators');
+const Option = require('fantasy-options');
 
-    These = daggy.taggedSum({
-        This: ['x'],
-        That: ['x'],
-        Both: ['x', 'y']
-    });
+const These = daggy.taggedSum({
+    This: ['x'],
+    That: ['x'],
+    Both: ['x', 'y']
+});
 
-These.of = function(x) {
-    return These.That(x);
-};
+These.of = These.That;
 
 These.prototype.map = function(f) {
     return this.bimap(identity, f);
@@ -22,65 +19,39 @@ These.prototype.map = function(f) {
 
 These.prototype.bimap = function(f, g) {
     return this.cata({
-        This: function(x) {
-            return These.This(f(x));
-        },
-        That: function(x) {
-            return These.That(g(x));
-        },
-        Both: function(x, y) {
-            return These.Both(f(x), g(y));
-        }
+        This: (x) => These.This(f(x)),
+        That: (x) => These.That(g(x)),
+        Both: (x, y) => These.Both(f(x), g(y))
     });
 };
 
 These.prototype.left = function() {
     return this.cata({
-        This: function(x) {
-            return Option.Some(x);
-        },
-        That: function(x) {
-            return Option.None;
-        },
-        Both: function(x, y) {
-            return Option.Some(x);
-        }
+        This: (x) => Option.Some(x),
+        That: (x) => Option.None,
+        Both: (x, y) => Option.Some(x)
     });
 };
 
 These.prototype.right = function() {
     return this.cata({
-        This: function(x) {
-            return Option.Nothing;
-        },
-        That: function(x) {
-            return Option.Some(x);
-        },
-        Both: function(x, y) {
-            return Option.Some(y);
-        }
+        This: (x) => Option.None,
+        That: (x) => Option.Some(x),
+        Both: (x, y) => Option.Some(y)
     });
 };
 
 These.thisOrBoth = function(x, y) {
     return y.cata({
-        Some: function(a) {
-            return These.Both(x, a);
-        },
-        Nothing: function() {
-            return These.This(x);
-        }
+        Some: (a) => These.Both(x, a),
+        Nothing: () => These.This(x)
     });
 };
 
 These.thatOrBoth = function(x, y) {
     return y.cata({
-        Some: function(a) {
-            return These.Both(x, a);
-        },
-        Nothing: function() {
-            return These.That(x);
-        }
+        Some: (a) => These.Both(x, a),
+        Nothing: () => These.That(x)
     });
 };
 
